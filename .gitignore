@@ -1,0 +1,12 @@
+ # 排除venv虚拟环境
+venv/
+
+# 排除一些常见的Python文件和目录
+__pycache__/
+*.pyc
+*.pyo
+
+# 排除一些编辑器和操作系统生成的文件
+.vscode/
+.DS_Store
+.idea/
