@@ -50,17 +50,17 @@ def callback():
 ##### 基本上程式編輯都在這個function #####
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    fear_index= getStockInfo.getFearIndex
-    maintenanceMargin = getStockInfo.getMaintenanceMargin
-    stock_info_data={**fear_index,**maintenanceMargin}
-    message_text = """
-        Fear Index: {},
-        Fear Index Status: {},
-        大盤融資維持率:{}
-    """
-    formatted_message = message_text.format(stock_info_data["Fear Index"],stock_info_data["Fear Index Status"],stock_info_data["大盤融資維持率"])
-
+   
     if event.message.text =='a':
+        fear_index= getStockInfo.getFearIndex
+        maintenanceMargin = getStockInfo.getMaintenanceMargin
+        stock_info_data={**fear_index,**maintenanceMargin}
+        message_text = """
+            Fear Index: {},
+            Fear Index Status: {},
+            大盤融資維持率:{}
+        """
+        formatted_message = message_text.format(stock_info_data["Fear Index"],stock_info_data["Fear Index Status"],stock_info_data["大盤融資維持率"])
         message = TextSendMessage(text=formatted_message)
         line_bot_api.reply_message(event.reply_token,message)
 
