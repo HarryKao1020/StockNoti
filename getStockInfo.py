@@ -17,6 +17,8 @@ def scraple_website(url):
 
     # 禁止圖片加載
     chrome_options.add_argument("--blink-settings=imagesEnabled=false")
+    chrome_options.add_argument('--headless')  # 启用无头模式
+    chrome_options.add_argument('--disable-gpu')  # 禁用GPU加速
 
     # 设置WebDriver的路径
     # webdriver_path = '/Users/harry/Desktop/stocknotify_linebot'
