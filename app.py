@@ -52,16 +52,16 @@ def callback():
 def handle_message(event):
    
     if event.message.text =='a':
-        fear_index= getStockInfo.getFearIndex
-        maintenanceMargin = getStockInfo.getMaintenanceMargin
-        stock_info_data={**fear_index,**maintenanceMargin}
-        message_text = """
-            Fear Index: {},
-            Fear Index Status: {},
-            大盤融資維持率:{}
-        """
-        formatted_message = message_text.format(stock_info_data["Fear Index"],stock_info_data["Fear Index Status"],stock_info_data["大盤融資維持率"])
-        message = TextSendMessage(text=formatted_message)
+        # fear_index= getStockInfo.getFearIndex
+        # maintenanceMargin = getStockInfo.getMaintenanceMargin
+        # stock_info_data={**fear_index,**maintenanceMargin}
+        # message_text = """
+        #     Fear Index: {},
+        #     Fear Index Status: {},
+        #     大盤融資維持率:{}
+        # """
+        # formatted_message = message_text.format(stock_info_data["Fear Index"],stock_info_data["Fear Index Status"],stock_info_data["大盤融資維持率"])
+        message = TextSendMessage(text="Hello World")
         line_bot_api.reply_message(event.reply_token,message)
 
 
