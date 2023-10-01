@@ -12,7 +12,7 @@ from linebot.models import *
 
 from app import app
 
-import requests
+import getStockInfo
 
 app = Flask(__name__)
  
@@ -45,12 +45,25 @@ def callback():
     return 'OK'
 
 
+
+
 #訊息傳遞區塊
 ##### 基本上程式編輯都在這個function #####
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    message = TextSendMessage(text=event.message.text)
-    line_bot_api.reply_message(event.reply_token,message)
+    fear_index= getStockInfo.getFearIndex
+    maintenanceMargin = getStockInfo.getMaintenanceMargin
+    stock_info_data=fear_index.update(maintenanceMargin)
+    message_text = """
+        Fear Index: {},
+        Fear Index Status: {},
+        大盤融資維持率:{}
+    """
+    formatted_message = message_text.format(maintenanceMargin["Fear Index"],maintenanceMargin["Fear Index Status"],stock_info_data["大盤融資維持率"])
+
+    if event.message.text =='a':
+        message = TextSendMessage(text=formatted_message)
+        line_bot_api.reply_message(event.reply_token,message)
 
 
 #主程式

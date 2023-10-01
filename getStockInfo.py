@@ -1,38 +1,103 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-# 设置 Chrome WebDriver 的选项
-chrome_options = webdriver.ChromeOptions()
+from bs4 import BeautifulSoup
+import json
+import threading
+import time
 
-# 禁用图片加载
-chrome_options.add_argument("--blink-settings=imagesEnabled=false")
 
-# 设置WebDriver的路径
-webdriver_path = '/Users/harry/Desktop/stocknotify_linebot'
 
-# 创建一个Chrome浏览器实例
-driver = webdriver.Chrome(options=chrome_options)
+def scraple_website(url):
+    # 設定 Chrome WebDriver 的選項
+    chrome_options = webdriver.ChromeOptions()
 
-# 打开目标URL
-url = "https://edition.cnn.com/markets/fear-and-greed"
-driver.get(url)
+    #設定頁面的載入策略: 
+    #normal-等待整個頁面家載完畢才執行
+    #eager-等待dom樹加載完成，放棄圖片...等加載
+    chrome_options.page_load_strategy='normal'
 
-# 等待页面加载完成（你可以根据实际情况调整等待时间）
-driver.implicitly_wait(10)
+    # 禁止圖片加載
+    chrome_options.add_argument("--blink-settings=imagesEnabled=false")
 
-# 查找包含 "fear_index_text" 的元素
-fear_index_element = driver.find_element(By.CLASS_NAME,"market-fng-gauge__historical-item-index-value")
+    # 设置WebDriver的路径
+    # webdriver_path = '/Users/harry/Desktop/stocknotify_linebot'
 
-#market_situation = driver.find_element(By.CLASS_NAME,"market-fng-gauge__historical-item-index-label:before")
-# 提取 "fear_index_text" 的文本内容
-fear_index_text = fear_index_element.text
+    #    建一個Chrome實例
+    driver = webdriver.Chrome(options=chrome_options)
 
-#market_situation_text =market_situation.text
-print(fear_index_text)
+    # 打开目标URL
+    driver.get(url)
 
-# 关闭浏览器
-driver.quit()
+    # 等待頁面加载完成的時間
+    driver.implicitly_wait(10)
 
-# 从文本内容中提取数字
-# previous_close_value = previous_close_text.split(":")[1].strip()
+    
+    page_content = driver.page_source
 
-# print("Previous close:", previous_close_value)
+    soup = BeautifulSoup(page_content,'html.parser')
+
+    # 關閉chrome
+    driver.quit()
+
+    return soup
+
+def getFearIndex():
+    url = "https://alternative.me/crypto/fear-and-greed-index/"
+    soup = scraple_website(url)
+    
+    # 查找包含 index-value的元素
+    fear_index_element = soup.find("div", class_="fng-circle")
+    #提取 "fear_index_element" 的内容
+    fear_index = fear_index_element.text
+
+    fear_index = int(fear_index)
+
+    # 判斷fear index處於哪一個階段
+    # <=25 Extreme Fear 
+    # <45 Fear
+    # >=45 Neutral
+    # >=55 Greed
+    # >=75 Extreme Greed
+    if(fear_index < 25):
+        fear_index_status = "Extreme Fear"
+    elif(fear_index <45):
+        fear_index_status = "Fear"
+    elif(fear_index <55):
+        fear_index_status = "Neutral"
+    elif(fear_index < 75):
+        fear_index_status = "Greed"
+    else:
+        fear_index_status= "Extreme Greed"
+    
+    fear_index_data = {
+        "Fear Index" : fear_index,
+        "Fear Index Status" : fear_index_status
+    }
+    #轉成json
+    #fearIndex_json_data = json.dumps(fear_index_data)
+
+    return fear_index_data
+
+def getMaintenanceMargin():
+    url = "https://www.istock.tw/post/twmarginrequirement"
+    soup = scraple_website(url)
+
+    #取頁面的p class=h1 font-bold m-t
+    maintenance_margin = soup.find_all("p",class_="h1 font-bold m-t")
+    
+    #有4筆相同的，我們要的融資維持率在第二筆
+    maintenance_margin_text = maintenance_margin[1].text
+
+    maintenance_margin_data={
+        "大盤融資維持率": maintenance_margin_text+"%"
+    }
+
+    #轉成json
+    #maintenance_margin_json_data = json.dumps(maintenance_margin_data,ensure_ascii=False)
+    return maintenance_margin_data
+    # 查找包含 index-value的元素
+
+
+
+print(getFearIndex())
+print(getMaintenanceMargin())
