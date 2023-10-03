@@ -1,5 +1,6 @@
- # 排除venv虚拟环境
+# 排除venv虚拟环境
 venv/
+stockBot-venv/
 
 # 排除一些常见的Python文件和目录
 __pycache__/

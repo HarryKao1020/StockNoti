@@ -1,12 +1,34 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
+
+#for edge
+from selenium.webdriver.edge.service import Service
+
 import json
+
+import os
+# 获取当前脚本的目录
+current_directory = os.path.dirname(__file__)  # 使用__file__获取当前脚本的路径
+print(current_directory)
+# 构建相对路径
+relative_path = "msedgedriver.exe"
+print(relative_path)
+# 组合基准目录和相对路径
+absolute_path = os.path.join(current_directory, relative_path)
+print(absolute_path)
+# 使用absolute_path作为msedgedriver.exe的路径
+edge_driver_path = absolute_path
+
+
 
 
 
 
 def scraple_website(url):
+
+    
+    """ Chrome
     # 設定 Chrome WebDriver 的選項
     chrome_options = webdriver.ChromeOptions()
 
@@ -21,24 +43,34 @@ def scraple_website(url):
     chrome_options.add_argument('--disable-gpu')  # 禁用GPU加速
 
     # 设置WebDriver的路径
-    # webdriver_path = '/Users/harry/Desktop/stocknotify_linebot'
+    #webdriver_path = '/Users/harry/Desktop/stocknotify_linebot'
 
     #    建一個Chrome實例
     driver = webdriver.Chrome(options=chrome_options)
+
+    """
+
+
+    # Edge
+    #edge_driver_path = 'C:/Users/kingbaby/Desktop/sideProject-股市機器人/StockNoti/msedgedriver.exe'
+    service = Service(executable_path=edge_driver_path)
+    driver = webdriver.Edge(service=service)
+
+
 
     # 打开目标URL
     driver.get(url)
 
     # 等待頁面加载完成的時間
-    driver.implicitly_wait(10)
+    # driver.implicitly_wait(10)
 
     
     page_content = driver.page_source
 
     soup = BeautifulSoup(page_content,'html.parser')
 
-    # 關閉chrome
-    driver.quit()
+    # 關閉
+    # driver.quit()
 
     return soup
 
@@ -74,6 +106,7 @@ def getFearIndex():
         "Fear Index" : fear_index,
         "Fear Index Status" : fear_index_status
     }
+    print(fear_index_data)
     #轉成json
     #fearIndex_json_data = json.dumps(fear_index_data)
 
@@ -100,5 +133,5 @@ def getMaintenanceMargin():
 
 
 
-print(getFearIndex())
+getFearIndex()
 print(getMaintenanceMargin())
