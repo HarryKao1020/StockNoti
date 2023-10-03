@@ -10,13 +10,10 @@ import json
 import os
 # 获取当前脚本的目录
 current_directory = os.path.dirname(__file__)  # 使用__file__获取当前脚本的路径
-print(current_directory)
 # 构建相对路径
 relative_path = "msedgedriver.exe"
-print(relative_path)
 # 组合基准目录和相对路径
 absolute_path = os.path.join(current_directory, relative_path)
-print(absolute_path)
 # 使用absolute_path作为msedgedriver.exe的路径
 edge_driver_path = absolute_path
 
@@ -53,8 +50,8 @@ def scraple_website(url):
 
     # Edge
     #edge_driver_path = 'C:/Users/kingbaby/Desktop/sideProject-股市機器人/StockNoti/msedgedriver.exe'
-    service = Service(executable_path=edge_driver_path)
-    driver = webdriver.Edge(service=service)
+    s = Service(executable_path=edge_driver_path)
+    driver = webdriver.Edge(service=s)
 
 
 
@@ -129,4 +126,5 @@ def getMaintenanceMargin():
     #maintenance_margin_json_data = json.dumps(maintenance_margin_data,ensure_ascii=False)
     return maintenance_margin_data
     # 查找包含 index-value的元素
+
 

@@ -50,10 +50,10 @@ def callback():
 ##### 基本上程式編輯都在這個function #####
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-   
+
     if event.message.text =='a':
-        fear_index= getStockInfo.getFearIndex
-        maintenanceMargin = getStockInfo.getMaintenanceMargin
+        fear_index= getStockInfo.getFearIndex()
+        maintenanceMargin = getStockInfo.getMaintenanceMargin()
         stock_info_data={**fear_index,**maintenanceMargin}
         message_text = """
             Fear Index: {},
