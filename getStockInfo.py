@@ -106,7 +106,6 @@ def getFearIndex():
         "Fear Index" : fear_index,
         "Fear Index Status" : fear_index_status
     }
-    print(fear_index_data)
     #轉成json
     #fearIndex_json_data = json.dumps(fear_index_data)
 
@@ -131,7 +130,3 @@ def getMaintenanceMargin():
     return maintenance_margin_data
     # 查找包含 index-value的元素
 
-
-
-getFearIndex()
-print(getMaintenanceMargin())
